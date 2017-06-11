@@ -2,18 +2,25 @@
 #+STARTUP: indent
 
 * Death
+** Grim Reaper
 
 * Murder
+** Blood
 
 * Serial Killer
+** Hannibal Lector
 
 * Rape
+** Violation of Trust
 
 * Cannibalism
+** Primal Human instincts
 
 * Slavory
+** Determinism
 
 * Child abuse
+** Parenthood
 
 * Vampires
 
@@ -22,7 +29,10 @@
 * Possession
 
 * Paranoia
+** Being followed
 
 * Alternate Pesronalities
 
 * Amenisa
+** Recovering memories
+** Dejavu
