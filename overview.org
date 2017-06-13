@@ -1,38 +1,52 @@
 #+STARTUP: hidestar
 #+STARTUP: indent
 
-* Death
-** Grim Reaper
+* Concepts
+** Death
+*** Grim Reaper
+*** Fear of death
 
-* Murder
-** Blood
+** Murder
+*** Blood
+*** Anticipation
 
-* Serial Killer
-** Hannibal Lector
+** Serial Killer
+*** Hannibal Lector
 
-* Rape
-** Violation of Trust
+** Rape
+*** Violation of Trust
 
-* Cannibalism
-** Primal Human instincts
+** Cannibalism
+*** Primal Human instincts
+*** Not knowing you are eating people
 
-* Slavory
-** Determinism
+** Slavory
+*** Determinism
 
-* Child abuse
-** Parenthood
+** Child abuse
+*** Parenthood
 
-* Vampires
+** Vampires
 
-* Demons
+** Demons
 
-* Possession
+** Paranoia
+*** Being followed
+*** Being somewhere unfamiliar
 
-* Paranoia
-** Being followed
+** Possession
 
-* Alternate Pesronalities
+** Alternate Pesronalities
+*** Someone else has been living your life
+*** Violation of privacy
 
-* Amenisa
-** Recovering memories
-** Dejavu
+** Amenisa
+*** Recovering memories
+*** Dejavu
+
+* Inspiration
+** Lovecraftian
+*** Bloodborne
+** Gothic
+*** Amnesia: The Dark Descent
+** Penumbra
