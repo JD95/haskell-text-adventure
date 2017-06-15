@@ -23,7 +23,10 @@ library
   build-depends:       base >= 4.7 && < 5
                      , free
                      , text
+                     , compdata
                      , protolude
+                     , mtl
+                     , adjunctions
   default-language:    Haskell2010
 
 executable game-exe

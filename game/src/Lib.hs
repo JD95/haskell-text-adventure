@@ -5,6 +5,7 @@ import Protolude
 import Conversation
 import Data.Text
 
+convo :: Conversation ()
 convo = do
     npc ["Hello there!"]
     choice $ do

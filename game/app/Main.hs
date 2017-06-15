@@ -3,4 +3,4 @@ module Main where
 import Lib
 
 main :: IO ()
-main = print "Hello there traveler."
+main = print "Hello there traveler"
