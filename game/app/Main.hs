@@ -3,4 +3,4 @@ module Main where
 import Lib
 
 main :: IO ()
-main = print "Super Alpha Haskell Text Adventure"
+main = print "Hello there traveler."
