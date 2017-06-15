@@ -16,10 +16,10 @@ import Data.Comp.Ops
 import Control.Monad.Identity
 
 import Conversation.NpcLine
-import Conversation.Response
+import Conversation.PlayerLine
 import Conversation.Choice
 
-type Conversation_ = NpcLine :+: Response :+: Choice
+type Conversation_ = NpcLine :+: PlayerLine :+: Choice
 
 -- | Models conversations between the player and some
 --   Entity.
