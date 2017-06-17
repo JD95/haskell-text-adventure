@@ -1,4 +1,4 @@
-{-# LANGUAGE MultiParamTypeClasses, DeriveFunctor, TypeOperators, FlexibleInstances, FlexibleContexts #-}
+{-# LANGUAGE MultiParamTypeClasses, DeriveFunctor, TypeOperators, FlexibleInstances, FlexibleContexts, GADTs #-}
 
 module Conversation.NpcLine ( NpcLine
                             , CoNpcLine
@@ -8,13 +8,13 @@ module Conversation.NpcLine ( NpcLine
 
 import Prelude () -- Don't use the default
 import Protolude ( (.), ($), Show, Functor
-                 , IO, MonadIO, liftIO, (>>=)
+                 , pure , IO, MonadIO, liftIO, (>>=)
                  , putStrLn
                  )  -- More minal, doesn't conflict
 import Data.Text  -- Better than String, is based on arrays
 import Control.Monad
 import Control.Monad.Free
-import Control.Monad.Trans.Free
+import Control.Comonad
 import Data.Comp.Ops
 
 import Pairing
@@ -34,10 +34,9 @@ npc lines = liftF . inj $ Npc lines ()
 -- | Wrapst he function for displaying an NPC line
 data CoNpcLine a = CoNpc ([Text] -> IO a) deriving (Functor)
 
-
 -- | Pairs the printing function with the lines
 instance MonadIO m => PairingM CoNpcLine NpcLine m where
-    pairM f (CoNpc p) (Npc lines b) = liftIO (p lines) >>= \p' -> f p' b
+    pairM f (CoNpc p) (Npc lines b) = liftIO (p lines) >>= (`f` b)
 
-displayNpcLine :: [Text] -> IO ()
-displayNpcLine = mapM_ putStrLn
+displayNpcLine :: Comonad w => w a -> CoNpcLine (w a)
+displayNpcLine w = CoNpc $ \lines -> mapM_ putStrLn lines >> pure w

@@ -4,10 +4,16 @@ module Conversation.Choice ( Choice
                            , CoChoice
                            , choice
                            , path
+                           , displayChoice
                            ) where
 
-import Prelude (unzip, (!!)) -- Don't use the default
-import Protolude ((.), ($), Int, Show, MonadIO, liftIO, IO, join, pure, Functor)  -- More minal, doesn't conflict
+import Prelude (zip, unzip, (!!)) -- Don't use the default
+import Protolude ((++), (.), ($)
+                  , (>=), (<=), (&&)
+                  , Int, Show, MonadIO,
+                  liftIO, IO, join, pure,
+                  putStrLn, show, Functor
+                 , getLine)  -- More minal, doesn't conflict
 import Data.Text  -- Better than String, is based on arrays
 import Control.Monad.Free
 import Control.Monad.Trans.Free
@@ -15,6 +21,11 @@ import Data.Comp.Sum
 import Data.Comp.Ops
 import Control.Monad.Identity
 import Data.DoList
+import Control.Monad
+import Control.Comonad
+import Text.Read (readMaybe)
+import Data.Maybe
+import Data.List
 
 import Pairing
 import Conversation.PlayerLine
@@ -47,4 +58,21 @@ instance MonadIO m => PairingM CoChoice Choice m where
     pairM f (CoChoice p) (Choice choices paths) = do
         (i, a) <- liftIO (p choices)
         f a (paths!!i)
-        
+
+getValidOption :: Int    -- Min
+               -> Int    -- Max
+               -> IO Int
+getValidOption  min max = do
+    i <- getLine
+    case readMaybe (unpack i) of
+      Just n -> if n >= min && n <= max
+                then pure n
+                else getValidOption min max
+      Nothing -> getValidOption min max
+
+displayChoice :: Comonad w => w a -> CoChoice (w a)
+displayChoice w = CoChoice $ \options -> do
+    forM_ (Prelude.zip [1..] options) $ \(i, text) ->
+      putStrLn (show i ++ " " ++ unpack text)
+    i <- getValidOption 1 (Data.List.length options)
+    pure (i, w)
