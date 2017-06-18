@@ -61,5 +61,5 @@ display = coiterT next start
 
 
 test :: IO ()
-test = pairEffectM (\_ r -> r) display (fmap pure demo)
+test = pairEffectM (flip const) display (fmap pure demo)
 

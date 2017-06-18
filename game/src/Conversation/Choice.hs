@@ -8,12 +8,7 @@ module Conversation.Choice ( Choice
                            ) where
 
 import Prelude (zip, unzip, (!!)) -- Don't use the default
-import Protolude ((++), (.), ($)
-                  , (>=), (<=), (&&)
-                  , Int, Show, MonadIO,
-                  liftIO, IO, join, pure,
-                  putStrLn, show, Functor
-                 , getLine)  -- More minal, doesn't conflict
+import Protolude  -- More minal, doesn't conflict
 import Data.Text  -- Better than String, is based on arrays
 import Control.Monad.Free
 import Control.Monad.Trans.Free
@@ -50,7 +45,7 @@ choice :: (Functor f, MonadFree f m, Choice :<: f)
        -> m ()
        -- ^ New converstaion
 choice options = join . liftF . inj $ Choice choices paths
-    where (choices, paths) = unzip (fmap (\(Path c p) -> (c,p)) $ toList options)
+    where (choices, paths) = unzip (fmap (\(Path c p) -> (c,p)) $ Data.DoList.toList options)
 
 data CoChoice a = CoChoice ([Text] -> IO (Int, a)) deriving (Functor)
 
@@ -75,4 +70,4 @@ displayChoice w = CoChoice $ \options -> do
     forM_ (Prelude.zip [1..] options) $ \(i, text) ->
       putStrLn (show i ++ " " ++ unpack text)
     i <- getValidOption 1 (Data.List.length options)
-    pure (i, w)
+    pure (i - 1, w) -- Because lists are 0 indexed
