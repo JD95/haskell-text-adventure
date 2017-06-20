@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveFunctor, OverloadedStrings, TypeApplications, TypeOperators, FlexibleContexts #-}
+{-# LANGUAGE OverloadedStrings, TypeOperators, FlexibleContexts #-}
 
 module Conversation ( Conversation
                     , Display
@@ -8,9 +8,9 @@ module Conversation ( Conversation
                     , path
                     ) where
 
-import Prelude () -- Don't use the default
+import Prelude () -- Don't use the default
 import Protolude ((.), (<*>),($), Int, MonadIO, IO, pure, const, flip)
-import Data.Text  -- Better than String, is based on arrays
+import Data.Text  -- Better than String, is based on arrays
 import Control.Monad.Free
 import Control.Monad.Trans.Free
 import Control.Comonad.Trans.Cofree
@@ -25,34 +25,33 @@ import Conversation.NpcLine
 import Conversation.PlayerLine
 import Conversation.Choice
 
--- | Represents the player state
-data GameState = GameState Int
+-- | Represents the player state
+data GameState =
+  GameState Int
 
--- | The underlying monad stack for the game
+-- | The underlying monad stack for the game
 type Base = StoreT GameState Identity
 
--- | Create a sum type to represent conversation structure
+-- | Create a sum type to represent conversation structure
 type Conversation_ = NpcLine :+: PlayerLine :+: Choice
 
--- | Create a product type to represent displaying the conversation
+-- | Create a product type to represent displaying the conversation
 type Display_ = CoNpcLine :*: CoPlayerLine :*: CoChoice
 
--- | Wrap our sum type into a Free Monad
+-- | Wrap our sum type into a Free Monad
 type Conversation a = FreeT Conversation_ IO a
 
--- | Wrap our product type into a Cofree Monad
+-- | Wrap our product type into a Cofree Monad
 type Display a = CofreeT Display_ Base a
 
 demo :: Conversation()
 demo = do
-    npc ["Hello there", "My name is bob!"]
-    player "I'm daniel!"
-    choice $ do
-        path "I'm leaving now!" $ do
-            npc ["Oh, okay!"]
-        path "Fuck off!" $ do
-            npc ["I see..."]
-    npc ["Good-bye"]
+  npc ["Hello there", "My name is bob!"]
+  player "I'm daniel!"
+  choice $ do
+    path "I'm leaving now!" $ do npc ["Oh, okay!"]
+    path "Fuck off!" $ do npc ["I see..."]
+  npc ["Good-bye"]
 
 display :: Display (IO ())
 display = coiterT next start

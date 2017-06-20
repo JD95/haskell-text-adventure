@@ -1,24 +1,23 @@
-{-# LANGUAGE FlexibleInstances      #-}
-{-# LANGUAGE FunctionalDependencies #-}
+{-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses  #-}
 {-# LANGUAGE RankNTypes             #-}
 {-# LANGUAGE TypeOperators #-}
 
-module Pairing (Pairing(..)
-               , PairingM(..)
-               , pairEffect
-               , pairEffectM
-               , pairEffect'
-               , (*:*)
-               ) where
+module Pairing
+  ( Pairing(..)
+  , PairingM(..)
+  , pairEffect
+  , pairEffectM
+  , pairEffect'
+  , (*:*)
+  ) where
 
-import           Control.Comonad              (Comonad, extract)
-import Control.Comonad.Trans.Cofree
+import Control.Comonad (Comonad, extract)
 import qualified  Control.Monad.Free as F
+import Control.Monad.Trans.Free (FreeF(..), FreeT, runFreeT)
 import qualified Control.Comonad.Cofree as C
-import           Control.Comonad.Trans.Cofree (CofreeT, unwrap)
-import           Control.Monad.Trans.Free     (FreeF (..), FreeT, runFreeT)
-import           Data.Functor.Identity        (Identity (..))
+import Control.Comonad.Trans.Cofree
+import Data.Functor.Identity (Identity(..))
 import Data.Comp.Sum
 import Data.Comp.Ops
 import Control.Applicative
@@ -36,7 +35,7 @@ instance Pairing ((,) a) ((->) a) where
   pair p f g = p (snd f) (g (fst f))
 
 instance Pairing f g => Pairing (C.Cofree f) (F.Free g) where
-  pair p (a C.:< _ ) (F.Pure x)  = p a x
+  pair p (a C.:< _) (F.Pure x) = p a x
   pair p (_ C.:< fs) (F.Free gs) = pair (pair p) fs gs
 
 instance (Pairing f f', Pairing g g') => Pairing (f :+: g) (f' :*: g') where
@@ -69,7 +68,7 @@ instance (Monad m, Comonad w, PairingM f g m) => PairingM (CofreeT f w) (FreeT g
       case f' of
         Free x -> pairM (pairM p) b x
         Pure y -> p a y
-        
+
 
 pairEffect :: (Pairing f g, Comonad w, Monad m)
            => (a -> b -> r) -> CofreeT f w a -> FreeT g m b -> m r
