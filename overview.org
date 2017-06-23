@@ -36,21 +36,6 @@
 ** Child abuse
 *** Parenthood
 *** Violence
-** Vampires
-*** Desire to feed
-*** Hunter
-*** Fangs
-*** Dead
-*** No Cure
-*** Desire to live forever
-** Demons
-*** Fighters
-*** Born in the Underworld
-*** Killers
-*** Insane
-*** Dead
-*** No Soul
-*** No Cure
 ** Paranoia
 *** Being followed
 *** Being somewhere unfamiliar
@@ -58,7 +43,7 @@
 *** No control over yourself
 *** Violent
 *** Cure
-** Alternate Pesronalities
+** Alternate Personalities
 *** Someone else has been living your life
 *** Violation of privacy
 *** Easily forgetful
