@@ -12,7 +12,7 @@ module Pairing
   , (*:*)
   ) where
 
-import Control.Comonad (Comonad, extract)
+import            Control.Comonad (Comonad, extract)
 import qualified  Control.Monad.Free as F
 import Control.Monad.Trans.Free (FreeF(..), FreeT, runFreeT)
 import qualified Control.Comonad.Cofree as C
