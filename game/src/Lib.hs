@@ -1,9 +1,9 @@
 module Lib where
 
-import Prelude()
-import Protolude
 import Conversation
 import Data.Text
+import Prelude()
+import Protolude
 
 convo :: Conversation ()
 convo = do

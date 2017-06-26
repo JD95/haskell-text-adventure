@@ -8,16 +8,16 @@ module Conversation.NpcLine
   , displayNpcLine
   ) where
 
+import Control.Comonad
+import Control.Monad
+import Control.Monad.Free
+import Data.Comp.Ops
+import Data.Text  -- Better than String, is based on arrays
 import Prelude () -- Don't use the default
 import Protolude
        (Functor, IO, MonadIO, Show, ($), (.), (>>=), liftIO, pure,
         putStrLn)
                     -- More minal, doesn't conflict
-import Data.Text  -- Better than String, is based on arrays
-import Control.Monad
-import Control.Monad.Free
-import Control.Comonad
-import Data.Comp.Ops
 
 import Pairing
 

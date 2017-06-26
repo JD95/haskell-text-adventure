@@ -8,17 +8,17 @@ module Conversation.PlayerLine
   , displayPlayerLine
   ) where
 
+import Control.Comonad
+import Control.Monad.Free
+import Control.Monad.Identity
+import Control.Monad.Trans.Free
+import Data.Comp.Ops
+import Data.Comp.Sum
+import Data.Text  -- Better than String, is based on arrays
 import Prelude () -- Don't use the default
 import Protolude  -- More minal, doesn't conflict
        (Functor, IO, MonadIO, Show, ($), (.), (>>=), liftIO, pure,
         putStrLn)
-import Data.Text  -- Better than String, is based on arrays
-import Control.Monad.Free
-import Control.Monad.Trans.Free
-import Data.Comp.Sum
-import Data.Comp.Ops
-import Control.Monad.Identity
-import Control.Comonad
 
 import Pairing
 

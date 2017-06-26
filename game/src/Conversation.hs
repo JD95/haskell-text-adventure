@@ -8,21 +8,23 @@ module Conversation ( Conversation
                     , path
                     ) where
 
+import Control.Comonad.Store
+import Control.Comonad.Trans.Cofree
+import Control.Monad.Free
+import Control.Monad.Identity
+import Control.Monad.Trans.Free
+import Data.Comp.Ops
+import Data.Comp.Sum
+import Data.Text  -- Better than String, is based on arrays
 import Prelude () -- Don't use the default
 import Protolude ((.), (<*>),($), Int, MonadIO, IO, pure, const, flip)
-import Data.Text  -- Better than String, is based on arrays
-import Control.Monad.Free
-import Control.Monad.Trans.Free
-import Control.Comonad.Trans.Cofree
-import Data.Comp.Sum
-import Data.Comp.Ops
-import Control.Monad.Identity
-import Control.Comonad.Store
 
 import Pairing
 import Conversation.NpcLine
 import Conversation.PlayerLine
 import Conversation.Choice
+
+
 
 -- | Represents the player state
 newtype GameState =
@@ -49,7 +51,7 @@ demo = do
   player "I'm daniel!"
   choice $ do
     path "I'm leaving now!" $ npc ["Oh, okay!"]
-    path "Fuck off!" $ npc ["I see..."]
+    path "Sod off!" $ npc ["I see..."]
   npc ["Good-bye"]
 
 -- | Displays a conversation

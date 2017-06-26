@@ -12,15 +12,15 @@ module Pairing
   , (*:*)
   ) where
 
-import            Control.Comonad (Comonad, extract)
-import qualified  Control.Monad.Free as F
-import Control.Monad.Trans.Free (FreeF(..), FreeT, runFreeT)
+import           Control.Comonad (Comonad, extract)
+import qualified Control.Monad.Free as F
+import           Control.Monad.Trans.Free (FreeF(..), FreeT, runFreeT)
 import qualified Control.Comonad.Cofree as C
-import Control.Comonad.Trans.Cofree
-import Data.Functor.Identity (Identity(..))
-import Data.Comp.Sum
-import Data.Comp.Ops
-import Control.Applicative
+import           Control.Comonad.Trans.Cofree
+import           Data.Functor.Identity (Identity(..))
+import           Data.Comp.Sum
+import           Data.Comp.Ops
+import           Control.Applicative
 
 class (Functor f, Functor g) => Pairing f g where
   pair :: (a -> b -> r) -> f a -> g b -> r
