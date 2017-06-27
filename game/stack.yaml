@@ -2,6 +2,8 @@ flags: {}
 extra-package-dbs: []
 packages:
 - '.'
+- location: sdl2
+- location: sdl2-mixer
 extra-deps:
 - QuickCheck-2.8.2
 - compdata-0.11
