@@ -47,11 +47,11 @@ type Display a = CofreeT Display_ Base a
 
 demo :: Conversation ()
 demo = do
-  npc ["Hello there", "My name is bob!"]
-  player "I'm daniel!"
+  npc ["", "Hello there", "My name is bob!", ""]
+  player "[Player] I'm daniel!"
   choice $ do
-    path "I'm leaving now!" $ npc ["Oh, okay!"]
-    path "Sod off!" $ npc ["I see..."]
+    path "I'm leaving now!" $ npc ["", "Oh, okay!"]
+    path "Sod off!" $ npc ["", "I see..."]
   npc ["Good-bye"]
 
 -- | Displays a conversation
@@ -62,4 +62,3 @@ display = coiterT next start
 
 test :: IO ()
 test = pairEffectM (flip const) display (fmap pure demo)
-

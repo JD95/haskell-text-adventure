@@ -82,6 +82,6 @@ displayChoice :: Comonad w => w a -> CoChoice (w a)
 displayChoice w =
   CoChoice $ \options -> do
     forM_ (Prelude.zip [1 ..] options) $ \(i, text) ->
-      putStrLn (show i ++ " " ++ unpack text)
+      putStrLn (">" ++ show i ++ " " ++ unpack text)
     i <- getValidOption 1 (Data.List.length options)
     pure (i - 1, w) -- Because lists are 0 indexed
