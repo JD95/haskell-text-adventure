@@ -20,6 +20,7 @@ import Control.Monad.State.Lazy
 import Control.Monad.IO.Class
 import System.IO
 import Control.Monad
+import Data.Bifunctor
 
 class RAII a where
   destruct :: a -> IO ()
@@ -39,48 +40,49 @@ instance (KnownSymbol t, Show a) => Show (Resource t a) where
 
 data Resources xs where
   None :: Resources '[]
-  (:.) :: (KnownSymbol t, RAII a) => a -> Resources as -> Resources (Resource t a : as)
-
-infixr 6 :.
+  RCons :: (KnownSymbol t, RAII a) => a -> Resources as -> Resources (Resource t a : as)
 
 instance Show (Resources '[]) where
   show None = "None"
 
 instance (Show (Resources as), Show a) => Show (Resources (Resource t a : as)) where
-  show (a :. None) = show a
-  show (a :. rest) = show a ++ ", " ++ show rest
+  show (RCons a None) = show a
+  show (RCons a rest) = show a ++ ", " ++ show rest
 
-type family ResourcesAppendR (as :: [k]) (bs :: [k]) :: [k]
-type instance ResourcesAppendR '[] x = x
-type instance ResourcesAppendR (x : xs) ys = x : ResourcesAppendR xs ys
+type family ResourcesConcatR (as :: [k]) (bs :: [k]) :: [k]
+type instance ResourcesConcatR '[] x = x
+type instance ResourcesConcatR (x : xs) ys = x : ResourcesConcatR xs ys
 
-class ResourcesAppend as bs where
-  resourcesAppend ::
-       Resources as -> Resources bs -> Resources (ResourcesAppendR as bs)
+class ResourcesConcat as bs where
+  resourcesConcat ::
+       Resources as -> Resources bs -> Resources (ResourcesConcatR as bs)
 
-instance ResourcesAppend '[] as where
-  resourcesAppend None xs = xs
+instance ResourcesConcat '[] as where
+  resourcesConcat None xs = xs
 
-instance ResourcesAppend as bs where
-  resourcesAppend (a :. as) bs = a :. resourcesAppend as bs
+instance ResourcesConcat as bs where
+  resourcesConcat (RCons a as) bs = RCons a (resourcesConcat as bs)
 
 data ResourceM rs a = ResourceM (Resources rs) a deriving (Functor)
 
+data Tag (t :: Symbol) a where
+  Tag :: forall t a. KnownSymbol t => a -> Tag t a
+
+
 (-:) ::
      forall t r rs a. (KnownSymbol t, RAII r)
-  => ResourceM rs a
-  -> IO r
+  => IO (ResourceM rs a)
+  -> Tag t (IO r)
   -> IO (ResourceM (Resource t r : rs) a)
-(ResourceM rs a) -: mr = fmap (\r -> ResourceM (r :. rs) a) mr
+prev -: (Tag mr) = prev >>= \(ResourceM rs a) -> fmap (\x -> ResourceM (RCons x rs) a) mr
 
-resource :: forall t r. (KnownSymbol t, RAII r) => IO r -> IO (ResourceM '[Resource t r] ())
-resource mr = fmap (\r -> ResourceM (r :. None)  ()) mr
+con :: forall t r. (KnownSymbol t, RAII r) => IO r -> IO (ResourceM '[Resource t r] ())
+con mr = fmap (\r -> ResourceM (RCons r None)  ()) mr
 
 
 instance RAII Handle where
   destruct = hClose
 
---test = foldM_ (-:) (resource @"file" (openFile "test.txt" ReadMode)) $
---  [resource @"otherFile" (openFile "othertest.txt" ReadMode)]
-
-
+test = con @"file" (openFile "test.txt" ReadMode)
+    -: (Tag @"otherFile" (openFile "foo.txt" WriteMode))
+    -: (Tag @"yetAnotherFile" (openFile "bar.txt" WriteMode))
